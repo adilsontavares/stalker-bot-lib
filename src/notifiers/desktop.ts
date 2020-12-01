@@ -4,7 +4,7 @@ import Notifier from './notifier'
 import NodeNotifier, { NotificationMetadata } from 'node-notifier'
 import path from 'path'
 
-export default class NotificationNotifier implements Notifier {
+export default class DesktopNotifier implements Notifier {
 
     name() : string {
         return 'Notification'
