@@ -6,7 +6,9 @@ import Sleep from '../helpers/sleep'
 import chalk from 'chalk'
 import readline from 'readline'
 import Notifier from '../notifiers/notifier'
-import { config } from 'process'
+import output from '../helpers/output'
+
+const SERVER_MODE = (process.env.SERVER_MODE == 'true')
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -41,16 +43,20 @@ export default class ProductStalker {
             this._previousStatus[stalker.watcher.id()] = '~'
         }
 
-        console.log()
-        console.log(`Stalking "${config.product.name}" on ${this._storeStalkers.length} stores:`)
-        console.log()
+        output.log()
+        output.log(`Stalking "${config.product.name}" on ${this._storeStalkers.length} stores:`)
+        output.log()
 
         this._printAllPreviousStatus()
 
-        process.stdout.write(`\x1B[${this._storeStalkers.length}A`)
+        output.write(`\x1B[${this._storeStalkers.length}A`, false)
     }
 
     _printAllPreviousStatus() {
+        if (SERVER_MODE) {
+            return
+        }
+
         for (let stalker of this._storeStalkers) {
             this._printStatus(stalker.watcher, this._previousStatus[stalker.watcher.id()])
         }
@@ -68,12 +74,12 @@ export default class ProductStalker {
 
                 for (let j = deltaTimeout; j > 0; j -= 1000) {
                     this._printStatus(stalker.watcher, this._previousStatus[stalker.watcher.id()], false)
-                    process.stdout.write(` next in ${j / 1000}s\r`)
+                    output.write(` next in ${j / 1000}s\r`, false)
                     await Sleep(1000)
                 }
 
                 this._printStatus(stalker.watcher, 'requesting...', false)
-                process.stdout.write('\r')
+                output.write('\r')
 
                 const result = await stalker.request()
                 let status = "unknown"
@@ -108,33 +114,40 @@ export default class ProductStalker {
 
                 if (result.status == StoreStalkerStatus.Notify) {
 
-                    process.stdout.write(`\x1B[${this._storeStalkers.length - this._cursorLine}B\r`)
-                    console.log()
-                    console.log(`>>> 🥳 ${stalker.watcher.name()} was updated!`)
-                    console.log(`>>> Check in out: ${stalker.watcher.productUrl()}`)
-                    console.log()
+                    output.write(`\x1B[${this._storeStalkers.length - this._cursorLine}B\r`, false)
+                    output.log()
+                    output.log(`>>> 🥳 ${stalker.watcher.name()} was updated!`)
+                    output.log(`>>> Check in out: ${stalker.watcher.productUrl()}`)
+                    output.log()
 
                     const notifiers = this._config.notifiers
                     if (notifiers.length > 0) {
                         for (let notifier of notifiers) {
-                            process.stdout.write(`Triggering "${notifier.name()}": ...\r`)
+                            output.write(`Triggering "${notifier.name()}": ...\r`, false)
                             let ok = await notifier.notify(this._product, stalker.watcher)
-                            process.stdout.clearLine(1)
-                            process.stdout.write(`Triggering "${notifier.name()}": ${ok ? chalk.green('Ok') : chalk.red('Failed')}\n`)
+                            output.clearLine(1)
+                            output.write(`Triggering "${notifier.name()}": ${ok ? chalk.green('Ok') : chalk.red('Failed')}\n`)
                         }
-                        console.log()
+                        output.log()
                     }
 
-                    await this._waitForReturn()
-                    process.stdout.write(`\x1B[${this._storeStalkers.length + 5 + (this._config.notifiers.length > 0 ? this._config.notifiers.length + 1 : 0)}A\r`)
-                    process.stdout.clearScreenDown()
+                    if (!SERVER_MODE) {
+                        await this._waitForReturn()
+                    }
+
+                    output.write(`\x1B[${this._storeStalkers.length + 5 + (this._config.notifiers.length > 0 ? this._config.notifiers.length + 1 : 0)}A\r`, false)
+                    output.clearScreenDown()
                     this._printAllPreviousStatus()
-                    process.stdout.write(`\x1B[${this._storeStalkers.length - this._cursorLine}A\r`)
+                    output.write(`\x1B[${this._storeStalkers.length - this._cursorLine}A\r`, false)
                 }
             }
 
             this._cursorLine = 0
-            process.stdout.write(`\x1B[${this._storeStalkers.length}A`)
+            output.write(`\x1B[${this._storeStalkers.length}A`, false)
+
+            if (SERVER_MODE) {
+                output.log('-')
+            }
         }
     }
 
@@ -148,12 +161,12 @@ export default class ProductStalker {
         const title = watcher.name().padEnd(this._maxWatcherNameLength + 1, ' ')
         const text = `${title} [${status}]`
 
-        process.stdout.clearLine(1)
+        output.clearLine(1)
 
         if (newLine) {
             console.log(text)
         } else {
-            process.stdout.write(text)
+            output.write(text, false)
         }
     }
 }

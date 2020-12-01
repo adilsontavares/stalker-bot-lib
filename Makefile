@@ -13,3 +13,7 @@ build:
 .PHONY: run
 run:
 	@yarn start
+
+.PHONY: dev
+dev:
+	@yarn dev

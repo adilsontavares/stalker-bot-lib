@@ -36,6 +36,10 @@ export default class StoreStalker {
         this.watcher = watcher
 
         const localCachePath = path.join(__dirname, '../../.cache')
+        if (!fs.existsSync(localCachePath)) {
+            fs.mkdirSync(localCachePath)
+        }
+
         this._responsePath = path.join(localCachePath, `${product.id}-${watcher.id()}.${watcher.fileExtension()}`)
 
         if (fs.existsSync(this._responsePath)) {
@@ -69,6 +73,7 @@ export default class StoreStalker {
 
                 let olderResponse = this._lastResponse
                 this._lastResponse = data
+                
                 fs.writeFileSync(this._responsePath, this._lastResponse, 'utf-8')
 
                 if (!lastResponseWasEmpty) {

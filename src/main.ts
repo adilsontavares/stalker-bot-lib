@@ -4,6 +4,9 @@ import ProductStalker from './stalkers/product'
 import { Amazon, Americanas, Extra, FastShop, PontoFrio } from './watchers'
 import MobileNotifier from './notifiers/mobile'
 import express from 'express'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const stalker = new ProductStalker({
     timeout: 10000,
