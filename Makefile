@@ -12,4 +12,4 @@ build:
 
 .PHONY: run
 run: build
-	@node ./out/main.js
+	@yarn start
