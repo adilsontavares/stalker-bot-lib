@@ -1,9 +1,9 @@
 import EmailNotifier from './notifiers/email'
-import DesktopNotifier from './notifiers/desktop'
 import Product from './models/product'
 import ProductStalker from './stalkers/product'
 import { Amazon, Americanas, Extra, FastShop, PontoFrio } from './watchers'
 import MobileNotifier from './notifiers/mobile'
+import express from 'express'
 
 const stalker = new ProductStalker({
     timeout: 10000,
@@ -20,9 +20,14 @@ const stalker = new ProductStalker({
     ],
     notifiers: [
         // new DesktopNotifier(),
-        // new EmailNotifier('adilsonxds@gmail.com'),
+        new EmailNotifier('adilsonxds@gmail.com'),
         new MobileNotifier(),
     ]
 })
 
 stalker.startMonitoring()
+
+const app = express()
+app.get('/', (req, res) => {
+    res.send('The server is running!')
+})
