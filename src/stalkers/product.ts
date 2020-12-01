@@ -79,7 +79,7 @@ export default class ProductStalker {
                 }
 
                 this._printStatus(stalker.watcher, 'requesting...', false)
-                output.write('\r')
+                output.write('\r', false)
 
                 const result = await stalker.request()
                 let status = "unknown"
@@ -126,7 +126,7 @@ export default class ProductStalker {
                             output.write(`Triggering "${notifier.name()}": ...\r`, false)
                             let ok = await notifier.notify(this._product, stalker.watcher)
                             output.clearLine(1)
-                            output.write(`Triggering "${notifier.name()}": ${ok ? chalk.green('Ok') : chalk.red('Failed')}\n`)
+                            output.log(`Triggering "${notifier.name()}": ${ok ? chalk.green('Ok') : chalk.red('Failed')}`)
                         }
                         output.log()
                     }
@@ -162,7 +162,6 @@ export default class ProductStalker {
         const text = `${title} [${status}]`
 
         output.clearLine(1)
-        console.log('hello')
 
         if (newLine) {
             console.log(text)
