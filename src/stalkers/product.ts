@@ -18,7 +18,7 @@ const rl = readline.createInterface({
 export interface ProductStalkerConfig {
     product: Product
     watchers: StoreWatcher[]
-    notifiers?: Notifier[]
+    notifiers: Notifier[]
     timeout?: number
 }
 
@@ -46,6 +46,14 @@ export default class ProductStalker {
         output.log()
         output.log(`Stalking "${config.product.name}" on ${this._storeStalkers.length} stores:`)
         output.log()
+
+        if (SERVER_MODE && config.notifiers.length > 0) {
+            output.log('Enabled notifiers:')
+            for (let notifier of config.notifiers) {
+                output.log('- ' + notifier.name())
+            }
+            output.log()
+        }
 
         this._printAllPreviousStatus()
 

@@ -17,3 +17,12 @@ run:
 .PHONY: dev
 dev:
 	@yarn dev
+
+.PHONY: docker/up
+docker/up:
+	docker-compose build
+	docker-compose up -d 
+
+.PHONY: docker/down
+docker/down:
+	docker-compose down
