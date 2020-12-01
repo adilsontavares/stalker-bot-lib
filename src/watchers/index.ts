@@ -1,0 +1,6 @@
+export * from './modules/amazon'
+export * from './modules/americanas'
+export * from './modules/fastshop'
+export * from './modules/kabum'
+export * from './modules/extra'
+export * from './modules/pontofrio'
