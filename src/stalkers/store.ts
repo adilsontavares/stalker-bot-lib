@@ -1,11 +1,11 @@
 import path from 'path'
 import fs, { watch } from 'fs'
 import axios from 'axios'
-import chalk from 'chalk'
 import Product from '../models/product'
 import StoreWatcher, { StoreWatcherConfig } from '../watchers/watcher'
-import Sleep from '../helpers/sleep'
-import NodeNotifier, { NotificationMetadata } from 'node-notifier'
+import output from '../helpers/output'
+
+const SERVER_MODE = (process.env.SERVER_MODE == 'true')
 
 export enum StoreStalkerStatus {
     InitialDataFullfilled,
@@ -88,6 +88,13 @@ export default class StoreStalker {
             return { status: StoreStalkerStatus.NoChange }
         }
         catch (e) {
+
+            if (SERVER_MODE) {
+                output.log()
+                output.log(e)
+                output.log()
+            }
+
             return {
                 status: StoreStalkerStatus.Failed,
                 error: e

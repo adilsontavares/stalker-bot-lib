@@ -22,7 +22,7 @@ export default class Output {
         }
     }
 
-    static log(text?: string) {
-        console.log(text || '')
+    static log(message?: any, ...optionalParams: any[]) {
+        console.log(message || '', ...optionalParams)
     }
 }
