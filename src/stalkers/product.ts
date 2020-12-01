@@ -162,6 +162,7 @@ export default class ProductStalker {
         const text = `${title} [${status}]`
 
         output.clearLine(1)
+        console.log('hello')
 
         if (newLine) {
             console.log(text)
