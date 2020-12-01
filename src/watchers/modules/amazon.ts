@@ -19,7 +19,7 @@ export class Amazon extends StoreWatcher {
     }
 
     validateChange(old: string, current: string): boolean {
-        return true//!current.includes('Não temos previsão de quando este produto estará disponível novamente.')
+        return !current.includes('Não temos previsão de quando este produto estará disponível novamente.')
     }
 
     productUrl() : string {
