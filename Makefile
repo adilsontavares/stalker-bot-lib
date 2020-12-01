@@ -8,7 +8,7 @@ install:
 
 .PHONY: build
 build:
-	@tsc
+	@yarn tsc
 
 .PHONY: run
 run: build
