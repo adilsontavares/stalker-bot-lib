@@ -1,13 +1,13 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import EmailNotifier from './notifiers/email'
 import Product from './models/product'
 import ProductStalker from './stalkers/product'
 import { Amazon, Americanas, Extra, FastShop, PontoFrio } from './watchers'
 import MobileNotifier from './notifiers/mobile'
 import express from 'express'
-import dotenv from 'dotenv'
 import output from './helpers/output'
-
-dotenv.config()
 
 const PORT = parseInt(process.env.PORT || '80')
 const SERVER_MODE = (process.env.SERVER_MODE == 'true')
