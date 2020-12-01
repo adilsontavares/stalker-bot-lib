@@ -1,7 +1,3 @@
-.PHONY: deps/install
-deps/install:
-	@npm i -g typescript
-
 .PHONY: clear-cache
 clear-cache:
 	@rm -rf .cache && mkdir .cache
@@ -12,8 +8,8 @@ install:
 
 .PHONY: build
 build:
-	@tsc
+	@yarn build
 
 .PHONY: run
-run: build
-	@node ./out/main.js
+run:
+	@yarn start

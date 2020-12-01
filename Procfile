@@ -1,1 +1,1 @@
-web: make deps/install && make run
+web: make run

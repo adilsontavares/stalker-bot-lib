@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsc && node ./out/main.js"
+  },
   "dependencies": {
     "@types/chalk": "^2.2.0",
     "@types/diff": "^4.0.2",
