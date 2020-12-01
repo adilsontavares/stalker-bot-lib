@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "start": "tsc && node ./out/main.js"
+    "build": "yarn tsc",
+    "start": "yarn tsc && node ./out/main.js"
   },
   "dependencies": {
     "@types/chalk": "^2.2.0",
