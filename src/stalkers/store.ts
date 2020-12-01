@@ -88,13 +88,6 @@ export default class StoreStalker {
             return { status: StoreStalkerStatus.NoChange }
         }
         catch (e) {
-
-            if (SERVER_MODE) {
-                output.log()
-                output.log(e)
-                output.log()
-            }
-
             return {
                 status: StoreStalkerStatus.Failed,
                 error: e

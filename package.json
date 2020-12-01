@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node ./out/main.js",
     "dev": "yarn build && yarn start",
-    "postinstall": "tsc"
+    "postinstall": "make clear-cache && make build"
   },
   "dependencies": {
     "@types/chalk": "^2.2.0",
